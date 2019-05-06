@@ -17,6 +17,16 @@ No of open issues
 Link to that repository
 This Page must be responsive(Desktop and mobile).<br>
 
+`Libraries & framework` <br>
+
+The following cdns are included in index.html via scipt/links
+
+[Angular1.6](https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js),
+[jQuery3.3](https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js),
+[Bootstrap4](https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js),
+[Fontawsome](https://fontawesome.com/v4.7.0/icons/)
+
+
 
 ## Previews 
 
