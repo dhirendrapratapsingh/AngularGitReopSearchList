@@ -3,7 +3,6 @@
 ### `Just Download html file & play no Dependicies`
 
 
-
 ### `Requirements`
 
 Take input from the user in the input box
@@ -17,13 +16,6 @@ No of forks
 No of open issues
 Link to that repository
 This Page must be responsive(Desktop and mobile).<br>
-
-
-
-### Apart from requirements
-2. Implemented Bucket filling effect while propping files while dropping files for better Experience
-3. Implemented gallery showing all the files dropped
-4. If not image shows type of files
 
 
 ## Previews 
