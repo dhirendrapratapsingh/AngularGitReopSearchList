@@ -10,6 +10,9 @@
 
 </head>
 <style>
+    /* html,body, #gitRepoApp{
+        height: 100%;
+    } */
 	.card
 	{
 		background-color: #fff;
@@ -106,7 +109,6 @@
 		color: #11a0d1;;
 		font-size: 12px !important;
 		text-decoration: none;
-		/* border: 1px solid #11a0d1;; */
 		border: none;
 		background: white;
 		width: 100%;
@@ -117,9 +119,22 @@
 	}
 	.styledButtonblue:hover
 	{
-	background-color:#11a0d1;
-	color: white;
+        background-color:#11a0d1;
+        color: white;
 	}
+
+    .messageDiv{
+        padding: 10px;
+        margin: 20px;
+        text-align: center;
+    }
+
+    .messageDiv > label{
+        font-weight: bold;
+        color: gray;
+
+    }
+
 
 	@media screen and (max-width: 996px)
 	{
@@ -167,12 +182,12 @@
 
 <body>
 
-<div ng-app="myApp" ng-controller="customersCtrl" class="" ng-cloak><!-- prevents flickering -->
+<div ng-app="myApp" ng-controller="listCtrl" id="gitRepoApp" ng-cloak><!-- prevents flickering -->
 
 	<div class="row panel" >
 		
 		<div class="col" style="text-align:-webkit-right;">
-			<input type="text" ng-model="queryWord" class="form-control" style="margin-bottom:10px;width: 50%;">
+			<input type="text" ng-model="queryWord" class="form-control" style="margin-bottom:10px;width: 50%;" ng-keypress="handlerEnter($event)" placeholder="Enter keyword to search">
 		</div>
 		<div class="col">
 			<button ng-click="getrepolist()" ng-disabled="queryWord.length == 0" class="btn btn-success btn-md">Search</button>
@@ -224,58 +239,82 @@
 			</div>
 	
 		</div>
-		
-		
-		<div ng-if="repoListempty" class="col-md-10" style="padding:10px;margin: 20px;">
-			<label> The repository is empty</label>
-		</div>
-
 
 
 	</div>  <!--end of 2nd row div-->
 
+    <div ng-if="repoListempty" class="col-md-12 messageDiv" >
+        <label> The repositories could not be found for the searched word </label>
+    </div>
+
+    <div ng-if="!apiCalled" class="col-md-12 messageDiv jumbotron jumbotron-fluid"" >
+        <label> Please enter keyword for which you want to search reopsitories </label>
+    </div>
+
 	<div ng-show="loader" class="center">
-		<img src="https://ui-ex.com/images/gif-transparent-loading-4.gif" style="width:150px" />
+		<img src="ajax-loader (1).gif" style="width: 51px;position: fixed;top: 50%;left: 48%;" />
 	</div>
 </div> <!--end of application-->
 
 <script>
+
+function throttle(fn,delay){
+
+    var shouldUpdate = true, context, args;
+    return function(){
+        context = this;
+        args = arguments;
+        if(shouldUpdate){
+            fn.apply(context,args);
+            shouldUpdate = false;
+            setTimeout(()=>{
+                console.log('now it can be called');
+                shouldUpdate = true;
+            },delay);
+        }
+
+    }
+    
+}
+
 var app = angular.module('myApp', []);
-app.controller('customersCtrl', function($scope, $http)
+app.controller('listCtrl', function($scope, $http)
 {
 
 	$scope.RepositoryList =[];
 	$scope.repoListempty = false;
 	$scope.queryWord = '';
 	$scope.loader = false;
+    $scope.apiCalled = false;
+
 
 	//pagination variables
-	$scope.limit = 12;
-	$scope.offset = 0;
+	$scope.limit = 10;
+	$scope.page = 1;
 	$scope.pagesEnd = false;
 
 	
 	$scope.getrepolist =  function()
 	{
 		$scope.loader = true;
+        $scope.apiCalled = true;
 
-		$http.get("https://api.github.com/search/repositories?q="+ $scope.queryWord).then(function (response) // or we can use .success( function()) method
+		$http.get("https://api.github.com/search/repositories?q="+ $scope.queryWord+'&per_page='+ $scope.limit+ '&page='+ $scope.page).then(function (response) // or we can use .success( function()) method
 		{
 			console.log(response);
 			$scope.loader = false;
 
 			$scope.RepositoryList = response.data.items;
 
-			if($scope.RepositoryList.length == 0)
-			{
+			if($scope.RepositoryList.length == 0){
 				$scope.repoListempty = true;
-
 			}
-			else
-			{
+			else{
 				$scope.repoListempty = false;
 
 			}
+
+            $scope.page = $scope.page + 1;
 			
 		},function (error)
 		{
@@ -296,22 +335,21 @@ app.controller('customersCtrl', function($scope, $http)
 	/* 
 
 	In Pagination when user scrolls the list each time server call is made with some params i.e limit. offset
-	to show more items & the response gets concatenated in list, Any such param is not specified in Problem statement
-	still i fave written code snippet $scope.ConcatList() &  AttachPaginateWhenScroll
-	which can be used  to show my understanding*/
+	to show more items & the response gets concatenated in list,
+	$scope.ConcatList() &  AttachPaginateWhenScroll implements pagination conept*/
 	
 	$scope.ConcatList = function()
 	{
 		$scope.loader = true;
 
-		$http.get("https://api.github.com/search/repositories?q=" + $scope.queryWord +'&limit='+ $scope.limit+ '&offset='+ $scope.limit).then(function (response) 
+		$http.get("https://api.github.com/search/repositories?q=" + $scope.queryWord+'&per_page='+ $scope.limit+ '&page='+ $scope.page).then(function (response) 
 		{
 			console.log(response);
 			$scope.loader = false;
 
 			$scope.RepositoryList = $scope.RepositoryList.concat(response.data.items);
 
-			if (response.data.items.length / 12 != 1)
+			if (response.data.items.length < 10)
 			{
 				$scope.pagesEnd = true;  // no more items for the query
 			}
@@ -323,42 +361,53 @@ app.controller('customersCtrl', function($scope, $http)
 				$scope.repoListempty = false; 
 			}
 
-			$scope.offset = $scope.offset + $scope.limit;
+			$scope.page = $scope.page + 1;
 
-		});
+		}).catch(err=>{
+            console.warn('Coul not retrieve data because of folowing error');
+            console.error(err);
+        });
 
 	}
- 
-	function AttachPaginateWhenScroll() // ths function if called will attach pagination functionality
+	
+
+    $(document).ready(function () {
+        console.log("document ready");
+
+        $scope.OptimizedAttachPaginateWhenScroll = throttle($scope.ConcatList,5000) 
+        // ths function if called will attach pagination functionality by lmiitng it to 5 sconds ad unauthenticated request requires some limit
+
+        window.onscroll = function (event) {
+            console.log(event.target.scrollingElement.scrollTop);
+            var lastScrollTop = 0;
+
+            var st = event.target.scrollingElement.scrollTop;
+            if (st > lastScrollTop + window.outerHeight) {
+                console.log("slide down");
+                if (!$scope.pagesEnd) {
+                    $scope.OptimizedAttachPaginateWhenScroll();
+                }
+                lastScrollTop = st;
+            }
+
+
+        };
+
+    }); //end of document ready
+
+
+
+    $scope.handlerEnter = function(event) // ths function if called will attach pagination functionality
 	{
-		$(document).ready(function () {
-			//console.log("document ready");
-
-			window.onscroll = function (event) {
-				console.log(event.target.scrollingElement.scrollTop);
-				var lastScrollTop = 0;
-
-				var st = event.target.scrollingElement.scrollTop;
-				if (st > lastScrollTop + window.outerHeight) {
-					console.log("slide down");
-					if (!$scope.pagesEnd) {
-						$scope.ConcatList()
-					}
-					lastScrollTop = st;
-				}
-
-
-			};
-
-		}); //end of document ready
+        console.log(event);
+        if(event.key === "Enter"){
+            $scope.getrepolist();
+        }
+		
 	} 
 
-
 	
 
-	
-
-	
 });
 </script>
 
