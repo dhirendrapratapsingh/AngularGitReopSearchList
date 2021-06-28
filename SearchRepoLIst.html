@@ -10,9 +10,7 @@
 
 </head>
 <style>
-    /* html,body, #gitRepoApp{
-        height: 100%;
-    } */
+
 	.card
 	{
 		background-color: #fff;
@@ -91,7 +89,7 @@
 	padding: 2px;}
 
 	.container{
-	width:100%;
+	    width:100%;
 	}
 	body
 	{
@@ -125,7 +123,6 @@
 
     .messageDiv{
         padding: 10px;
-        margin: 20px;
         text-align: center;
     }
 
@@ -151,8 +148,8 @@
     		max-width: 100% !important;
 		}
 		.avtar {
-		width: 150px !important;
-		height: 150px !important;
+            width: 150px !important;
+            height: 150px !important;
 		}
 		.title {
 			
@@ -186,10 +183,10 @@
 
 	<div class="row panel" >
 		
-		<div class="col" style="text-align:-webkit-right;">
-			<input type="text" ng-model="queryWord" class="form-control" style="margin-bottom:10px;width: 50%;" ng-keypress="handlerEnter($event)" placeholder="Enter keyword to search">
+		<div class="col-md-7 col-sm-7 col-lg-7 col-xl-7 col-7 " style="text-align:-webkit-right;">
+			<input type="text" ng-model="queryWord" class="form-control" style="margin-bottom:10px;width: 200px;" ng-keypress="handlerEnter($event)" placeholder="Enter keyword to search">
 		</div>
-		<div class="col">
+		<div class="col-md-5 col-sm-5 col-lg-5 col-xl-5 col-5">
 			<button ng-click="getrepolist()" ng-disabled="queryWord.length == 0" class="btn btn-success btn-md">Search</button>
 		</div>
 	</div>
@@ -268,7 +265,7 @@ function throttle(fn,delay){
             fn.apply(context,args);
             shouldUpdate = false;
             setTimeout(()=>{
-                console.log('now it can be called');
+                console.log('expensive function called');
                 shouldUpdate = true;
             },delay);
         }

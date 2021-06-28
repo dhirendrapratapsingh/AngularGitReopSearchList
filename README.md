@@ -30,9 +30,12 @@ The following cdns are included in index.html via scipt/links
 
 ## Previews 
 
-![Screenshot from 2019-05-06 00-55-25](https://user-images.githubusercontent.com/32532380/57205954-cbda9200-6fdf-11e9-9733-ef523ad4ced5.png)
+![image](https://user-images.githubusercontent.com/32532380/123596831-45611a00-d810-11eb-858b-69f1bf60036e.png)
+
 ![Screenshot from 2019-05-06 00-55-46](https://user-images.githubusercontent.com/32532380/57205955-cbda9200-6fdf-11e9-9ad7-ce3fdebf72d7.png)
 ![Screenshot from 2019-05-06 00-57-29](https://user-images.githubusercontent.com/32532380/57205956-cbda9200-6fdf-11e9-8c75-211e32b7d32a.png)
 ![Screenshot from 2019-05-06 01-00-43](https://user-images.githubusercontent.com/32532380/57205957-cc732880-6fdf-11e9-947e-2af619eb34e9.png)
 ![Screenshot from 2019-05-06 08-47-07](https://user-images.githubusercontent.com/32532380/57205958-cc732880-6fdf-11e9-97c2-9053aaf8c504.png)
 ![Screenshot from 2019-05-06 09-16-51](https://user-images.githubusercontent.com/32532380/57205959-cc732880-6fdf-11e9-9285-7247fec606a2.png)
+
+![image](https://user-images.githubusercontent.com/32532380/123597140-953fe100-d810-11eb-9d8c-c15466691908.png)
